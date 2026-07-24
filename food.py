@@ -54,7 +54,7 @@ class Food:
         elapsed = time.time() - self.spawn_time
         return max(0.0, 1.0 - (elapsed / SPECIAL_FOOD_DURATION))
 
-    def draw(self, surface):
+    def draw(self, surface, sprites=None):
         gx, gy = self.position
         rect = pygame.Rect(
             gx * CELL_SIZE,
@@ -62,6 +62,13 @@ class Food:
             CELL_SIZE,
             CELL_SIZE,
         )
+
+        if sprites is not None and sprites.available:
+            img = sprites.food_special if self.is_special else sprites.food_apple
+            surface.blit(img, rect.topleft)
+            if self.is_special:
+                self._draw_timer_ring(surface, rect)
+            return
 
         if self.is_special:
             color = COLOR_SPECIAL_FOOD
@@ -89,6 +96,21 @@ class Food:
             inner_rect = rect.inflate(-6, -6)
             pygame.draw.circle(surface, color, inner_rect.center, inner_rect.width // 2)
             pygame.draw.circle(surface, outline, inner_rect.center, inner_rect.width // 2, width=2)
+
+    def _draw_timer_ring(self, surface, rect):
+        """Sprite modunda özel yemin üzerine kalan süreyi gösteren ince bir halka çizer."""
+        ratio = self.remaining_ratio()
+        if ratio <= 0:
+            return
+        end_angle = -90 + 360 * ratio
+        pygame.draw.arc(
+            surface,
+            (255, 255, 255),
+            rect.inflate(4, 4),
+            _deg_to_rad(-90),
+            _deg_to_rad(end_angle),
+            2,
+        )
 
 
 def _deg_to_rad(deg):

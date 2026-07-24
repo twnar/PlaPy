@@ -1,6 +1,8 @@
 """
 snake.py
 Yılanın kendisini temsil eden sınıf: konum, hareket, büyüme ve çizim.
+Pixel-art sprite'lar mevcutsa (assets.Sprites.available) onları kullanır;
+değilse eski vektörel (pygame.draw ile çizilen) görünüme geri düşer.
 """
 
 import pygame
@@ -74,7 +76,71 @@ class Snake:
     def occupies(self, pos):
         return pos in self.body
 
-    def draw(self, surface):
+    # ------------------------------------------------------------
+    # Çizim - sprite modu varsa onu kullanır, yoksa vektörel fallback
+    # ------------------------------------------------------------
+    def draw(self, surface, sprites=None):
+        if sprites is not None and sprites.available:
+            self._draw_sprites(surface, sprites)
+        else:
+            self._draw_vector(surface)
+
+    @staticmethod
+    def _dir_name(vec):
+        return {UP: "up", DOWN: "down", LEFT: "left", RIGHT: "right"}[vec]
+
+    def _draw_sprites(self, surface, sprites):
+        n = len(self.body)
+        for i, (gx, gy) in enumerate(self.body):
+            px = gx * CELL_SIZE
+            py = gy * CELL_SIZE + TOPBAR_HEIGHT
+
+            if i == 0:
+                # Baş: mevcut hareket yönüne bakar
+                img = sprites.head[self._dir_name(self.direction)]
+            elif i == n - 1:
+                # Kuyruk: bir önceki segmentten bu segmente doğru olan yön
+                prev = self.body[i - 1]
+                vec = (self.body[i - 1][0] - gx, self.body[i - 1][1] - gy)
+                # Kuyruk sprite'ı "kendi ucundan gövdeye doğru" yönü gösterir;
+                # bu yüzden komşuya bakan yönün tersini kullanıyoruz.
+                tail_dir = self._dir_name((-vec[0], -vec[1])) if vec in (UP, DOWN, LEFT, RIGHT) else "right"
+                img = sprites.tail_rotated(tail_dir)
+            else:
+                # Gövde: önceki ve sonraki segmentlere göre düz mü, kıvrım mı?
+                prev_seg = self.body[i - 1]
+                next_seg = self.body[i + 1]
+                img = self._body_sprite(sprites, prev_seg, (gx, gy), next_seg)
+
+            surface.blit(img, (px, py))
+
+    def _body_sprite(self, sprites, prev_seg, cur, next_seg):
+        """İki komşu segmente bakarak düz mü kıvrım mı olduğunu belirler ve doğru döndürülmüş sprite'ı döner."""
+        gx, gy = cur
+        in_vec = (gx - prev_seg[0], gy - prev_seg[1])    # önceki segmentten bu segmente giren yön
+        out_vec = (next_seg[0] - gx, next_seg[1] - gy)    # bu segmentten sonrakine çıkan yön
+
+        if in_vec == out_vec:
+            # Düz parça
+            vertical = in_vec in (UP, DOWN)
+            return sprites.body_straight(vertical=vertical)
+
+        # Kıvrım parça: hangi 2 yönün birleşimi olduğuna göre açı belirle.
+        # Referans sprite: soldan girer (RIGHT yönünde gelir), aşağı çıkar (DOWN yönünde gider) -> 0°
+        pairs_to_angle = {
+            (RIGHT, DOWN): 0,
+            (UP, LEFT): 0,
+            (DOWN, LEFT): 90,
+            (RIGHT, UP): 90,
+            (LEFT, UP): 180,
+            (DOWN, RIGHT): 180,
+            (UP, RIGHT): 270,
+            (LEFT, DOWN): 270,
+        }
+        angle = pairs_to_angle.get((in_vec, out_vec), 0)
+        return sprites.body_turn_rotated(angle)
+
+    def _draw_vector(self, surface):
         for i, (gx, gy) in enumerate(self.body):
             rect = pygame.Rect(
                 gx * CELL_SIZE,

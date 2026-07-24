@@ -22,35 +22,41 @@ DIFFICULTY_LEVELS = {
 }
 
 # ---- Renkler (R, G, B) ----
-COLOR_BG = (18, 20, 24)
-COLOR_GRID = (28, 31, 38)
-COLOR_TOPBAR = (24, 26, 32)
-COLOR_TEXT = (235, 235, 235)
-COLOR_TEXT_DIM = (150, 150, 155)
-COLOR_ACCENT = (80, 220, 120)
-COLOR_ACCENT_DARK = (40, 160, 90)
+# "Plassy" logosundaki orman/gece temasına uyarlanmış palet
+COLOR_BG = (16, 36, 22)              # koyu orman yeşili (gece zemini)
+COLOR_GRID = (22, 48, 28)
+COLOR_TOPBAR = (14, 30, 18)
+COLOR_TEXT = (232, 240, 220)
+COLOR_TEXT_DIM = (150, 185, 150)
+COLOR_ACCENT = (140, 214, 110)       # logo'daki açık pastel yeşil
+COLOR_ACCENT_DARK = (70, 140, 65)
 
-COLOR_SNAKE_HEAD = (90, 230, 130)
-COLOR_SNAKE_BODY = (60, 190, 110)
-COLOR_SNAKE_OUTLINE = (20, 60, 35)
+COLOR_SNAKE_HEAD = (140, 214, 110)
+COLOR_SNAKE_BODY = (96, 178, 88)
+COLOR_SNAKE_OUTLINE = (18, 40, 22)
 
-COLOR_FOOD = (235, 90, 90)
-COLOR_FOOD_OUTLINE = (140, 30, 30)
+COLOR_FOOD = (214, 84, 78)
+COLOR_FOOD_OUTLINE = (150, 44, 44)
 
-COLOR_SPECIAL_FOOD = (245, 200, 60)
-COLOR_SPECIAL_FOOD_OUTLINE = (150, 110, 10)
+COLOR_SPECIAL_FOOD = (242, 196, 70)   # logo'daki altın/sarı desen rengi
+COLOR_SPECIAL_FOOD_OUTLINE = (176, 122, 30)
 
 COLOR_WALL = (90, 90, 100)
 
-COLOR_BUTTON = (40, 44, 52)
-COLOR_BUTTON_HOVER = (55, 60, 70)
-COLOR_BUTTON_BORDER = (80, 220, 120)
+COLOR_BUTTON = (24, 52, 30)
+COLOR_BUTTON_HOVER = (34, 68, 40)
+COLOR_BUTTON_BORDER = (140, 214, 110)
 
 COLOR_GAMEOVER_OVERLAY = (0, 0, 0, 160)  # alpha'lı overlay
 
 # ---- Dosya Yolları ----
 HIGH_SCORE_FILE = "highscores.json"
 FONT_NAME = None  # None -> pygame varsayılan fontu kullanır
+
+# ---- Pixel-Art Sprite Ayarları ----
+USE_SPRITES = True             # False yapılırsa eski vektörel çizim kullanılır (yedek mod)
+SPRITE_DIR = "assets/sprites"
+SPRITE_SOURCE_SIZE = 128       # generate_sprites.py çıktısının piksel boyutu (128x128 PNG)
 
 # ---- Oyun Ayarları ----
 STARTING_LENGTH = 3
