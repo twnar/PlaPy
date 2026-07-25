@@ -1,4 +1,4 @@
-# 🐍 Snake Game — Python & Pygame
+# 🐍 PlaPy: Python Snake Game
 
 A fully featured, multi-file **pixel-art themed** Snake game.
 
