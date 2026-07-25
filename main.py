@@ -404,7 +404,7 @@ class Game:
         if self.new_record:
             draw_text_centered(
                 self.screen,
-                "🎉 New High Score! 🎉",
+                "New High Score!",
                 self.font_medium,
                 COLOR_ACCENT,
                 (SCREEN_WIDTH // 2, 260),
