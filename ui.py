@@ -48,8 +48,6 @@ def draw_topbar(surface, font, score, high_score, difficulty):
     diff_surf = font.render(difficulty, True, COLOR_TEXT_DIM)
     diff_rect = diff_surf.get_rect(topright=(SCREEN_WIDTH - 16, TOPBAR_HEIGHT // 2 - diff_surf.get_height() // 2))
     surface.blit(diff_surf, diff_rect)
-
-
 def draw_text_centered(surface, text, font, color, center_pos):
     surf = font.render(text, True, color)
     rect = surf.get_rect(center=center_pos)
