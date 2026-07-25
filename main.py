@@ -1,22 +1,22 @@
-"""
-main.py
-Snake oyununun giriş noktası. Durum makinesi (state machine) ile
-Menü -> Oyun -> Duraklat -> Oyun Sonu ekranları arasında geçiş yapar.
-
-Çalıştırmak için:
-    pip install pygame numpy
-    python main.py
-"""
-
 import sys
 import pygame
 
 from settings import (
-    SCREEN_WIDTH, SCREEN_HEIGHT, TOPBAR_HEIGHT, FPS,
-    CELL_SIZE, GRID_WIDTH, GRID_HEIGHT,
+    SCREEN_WIDTH,
+    SCREEN_HEIGHT,
+    TOPBAR_HEIGHT,
+    FPS,
+    CELL_SIZE,
+    GRID_WIDTH,
+    GRID_HEIGHT,
     DIFFICULTY_LEVELS,
-    COLOR_BG, COLOR_GRID, COLOR_TEXT, COLOR_TEXT_DIM, COLOR_ACCENT,
-    NORMAL_FOOD_SCORE, SPECIAL_FOOD_SCORE,
+    COLOR_BG,
+    COLOR_GRID,
+    COLOR_TEXT,
+    COLOR_TEXT_DIM,
+    COLOR_ACCENT,
+    NORMAL_FOOD_SCORE,
+    SPECIAL_FOOD_SCORE,
 )
 from snake import Snake, UP, DOWN, LEFT, RIGHT
 from food import Food
@@ -25,7 +25,6 @@ from highscore import load_high_scores, update_high_score
 from sounds import SoundManager
 from assets import Sprites
 
-# ---- Durumlar ----
 STATE_MENU = "menu"
 STATE_PLAYING = "playing"
 STATE_PAUSED = "paused"
@@ -35,7 +34,7 @@ STATE_GAMEOVER = "gameover"
 class Game:
     def __init__(self):
         pygame.init()
-        pygame.display.set_caption("Yılan Oyunu - Snake")
+        pygame.display.set_caption("Snake Game")
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
 
@@ -48,7 +47,7 @@ class Game:
         self.high_scores = load_high_scores()
 
         self.state = STATE_MENU
-        self.difficulty = "Orta"
+        self.difficulty = "Medium"
         self.score = 0
 
         self.snake = Snake()
@@ -61,13 +60,11 @@ class Game:
         self.pause_buttons = self._build_pause_buttons()
         self.gameover_buttons = self._build_gameover_buttons()
 
-    # ---------------------------------------------------------------
-    # Buton kurulumları
-    # ---------------------------------------------------------------
     def _build_menu_buttons(self):
         buttons = []
         center_x = SCREEN_WIDTH // 2
         y = 260
+
         for name in DIFFICULTY_LEVELS.keys():
             btn = Button(
                 (center_x - 100, y, 200, 44),
@@ -80,48 +77,52 @@ class Game:
 
         start_btn = Button(
             (center_x - 100, y + 10, 200, 50),
-            "BAŞLA",
+            "START",
             self.font_medium,
             callback=self._start_game,
         )
+
         buttons.append(start_btn)
         return buttons
 
     def _build_pause_buttons(self):
         center_x = SCREEN_WIDTH // 2
+
         resume_btn = Button(
             (center_x - 100, 260, 200, 46),
-            "Devam Et",
+            "Resume",
             self.font_medium,
             callback=self._resume_game,
         )
+
         menu_btn = Button(
             (center_x - 100, 320, 200, 46),
-            "Ana Menü",
+            "Main Menu",
             self.font_medium,
             callback=self._go_to_menu,
         )
+
         return [resume_btn, menu_btn]
 
     def _build_gameover_buttons(self):
         center_x = SCREEN_WIDTH // 2
+
         retry_btn = Button(
             (center_x - 100, 320, 200, 46),
-            "Tekrar Oyna",
+            "Play Again",
             self.font_medium,
             callback=self._start_game,
         )
+
         menu_btn = Button(
             (center_x - 100, 380, 200, 46),
-            "Ana Menü",
+            "Main Menu",
             self.font_medium,
             callback=self._go_to_menu,
         )
+
         return [retry_btn, menu_btn]
 
-    # ---------------------------------------------------------------
-    # Durum geçiş callback'leri
-    # ---------------------------------------------------------------
     def _select_difficulty(self, name):
         self.difficulty = name
         self.sounds.play_click()
@@ -147,9 +148,6 @@ class Game:
         self.sounds.play_click()
         self.state = STATE_PAUSED
 
-    # ---------------------------------------------------------------
-    # Ana döngü
-    # ---------------------------------------------------------------
     def run(self):
         while True:
             dt = self.clock.tick(FPS) / 1000.0
@@ -170,9 +168,11 @@ class Game:
             if self.state == STATE_MENU:
                 for btn in self.menu_buttons:
                     btn.handle_event(event)
+
             elif self.state == STATE_PAUSED:
                 for btn in self.pause_buttons:
                     btn.handle_event(event)
+
             elif self.state == STATE_GAMEOVER:
                 for btn in self.gameover_buttons:
                     btn.handle_event(event)
@@ -181,12 +181,16 @@ class Game:
         if self.state == STATE_PLAYING:
             if key in (pygame.K_UP, pygame.K_w):
                 self.snake.set_direction(UP)
+
             elif key in (pygame.K_DOWN, pygame.K_s):
                 self.snake.set_direction(DOWN)
+
             elif key in (pygame.K_LEFT, pygame.K_a):
                 self.snake.set_direction(LEFT)
+
             elif key in (pygame.K_RIGHT, pygame.K_d):
                 self.snake.set_direction(RIGHT)
+
             elif key == pygame.K_ESCAPE or key == pygame.K_p:
                 self._pause_game()
 
@@ -201,20 +205,19 @@ class Game:
         elif self.state == STATE_GAMEOVER:
             if key == pygame.K_RETURN:
                 self._start_game()
+
             elif key == pygame.K_ESCAPE:
                 self._go_to_menu()
 
-    # ---------------------------------------------------------------
-    # Güncelleme mantığı
-    # ---------------------------------------------------------------
     def _update(self, dt):
         if self.state != STATE_PLAYING:
             return
 
-        speed = DIFFICULTY_LEVELS[self.difficulty]  # hücre/saniye
+        speed = DIFFICULTY_LEVELS[self.difficulty]
         step_duration = 1.0 / speed
 
         self.move_timer += dt
+
         if self.move_timer >= step_duration:
             self.move_timer -= step_duration
             self.snake.move()
@@ -224,6 +227,7 @@ class Game:
                 return
 
             head = self.snake.get_head_position()
+
             if head == self.food.position:
                 if self.food.is_special:
                     self.score += SPECIAL_FOOD_SCORE
@@ -233,9 +237,9 @@ class Game:
                     self.score += NORMAL_FOOD_SCORE
                     self.snake.grow(1)
                     self.sounds.play_eat()
+
                 self.food.respawn(self.snake.body)
 
-        # Özel yemin süresi dolduysa yeni yem üret
         if self.food.is_expired():
             self.food.respawn(self.snake.body)
 
@@ -245,18 +249,18 @@ class Game:
         self.high_scores = load_high_scores()
         self.state = STATE_GAMEOVER
 
-    # ---------------------------------------------------------------
-    # Çizim
-    # ---------------------------------------------------------------
     def _draw(self):
         self.screen.fill(COLOR_BG)
 
         if self.state == STATE_MENU:
             self._draw_menu()
+
         elif self.state in (STATE_PLAYING, STATE_PAUSED):
             self._draw_game()
+
             if self.state == STATE_PAUSED:
                 self._draw_pause_overlay()
+
         elif self.state == STATE_GAMEOVER:
             self._draw_game()
             self._draw_gameover_overlay()
@@ -267,14 +271,21 @@ class Game:
                 for y in range(GRID_HEIGHT):
                     variant = (x + y) % 2
                     img = self.sprites.grass[variant]
-                    self.screen.blit(img, (x * CELL_SIZE, y * CELL_SIZE + TOPBAR_HEIGHT))
+                    self.screen.blit(
+                        img,
+                        (x * CELL_SIZE, y * CELL_SIZE + TOPBAR_HEIGHT),
+                    )
             return
 
         for x in range(GRID_WIDTH):
             for y in range(GRID_HEIGHT):
                 rect = pygame.Rect(
-                    x * CELL_SIZE, y * CELL_SIZE + TOPBAR_HEIGHT, CELL_SIZE, CELL_SIZE
+                    x * CELL_SIZE,
+                    y * CELL_SIZE + TOPBAR_HEIGHT,
+                    CELL_SIZE,
+                    CELL_SIZE,
                 )
+
                 if (x + y) % 2 == 0:
                     pygame.draw.rect(self.screen, COLOR_GRID, rect)
 
@@ -282,75 +293,132 @@ class Game:
         self._draw_grid()
         self.food.draw(self.screen, self.sprites)
         self.snake.draw(self.screen, self.sprites)
+
         high = self.high_scores.get(self.difficulty, 0)
-        draw_topbar(self.screen, self.font_small, self.score, high, self.difficulty)
+        draw_topbar(
+            self.screen,
+            self.font_small,
+            self.score,
+            high,
+            self.difficulty,
+        )
 
     def _draw_menu(self):
         draw_text_centered(
-            self.screen, "YILAN OYUNU", self.font_large, COLOR_ACCENT,
-            (SCREEN_WIDTH // 2, 100)
-        )
-        draw_text_centered(
-            self.screen, "Zorluk seç ve başla", self.font_small, COLOR_TEXT_DIM,
-            (SCREEN_WIDTH // 2, 150)
+            self.screen,
+            "SNAKE GAME",
+            self.font_large,
+            COLOR_ACCENT,
+            (SCREEN_WIDTH // 2, 100),
         )
 
-        # Seçili zorluğu vurgula
-        for i, (name, btn) in enumerate(zip(DIFFICULTY_LEVELS.keys(), self.menu_buttons)):
+        draw_text_centered(
+            self.screen,
+            "Select difficulty and start",
+            self.font_small,
+            COLOR_TEXT_DIM,
+            (SCREEN_WIDTH // 2, 150),
+        )
+
+        for name, btn in zip(
+            DIFFICULTY_LEVELS.keys(),
+            self.menu_buttons,
+        ):
             if name == self.difficulty:
-                pygame.draw.rect(self.screen, COLOR_ACCENT, btn.rect, width=3, border_radius=10)
+                pygame.draw.rect(
+                    self.screen,
+                    COLOR_ACCENT,
+                    btn.rect,
+                    width=3,
+                    border_radius=10,
+                )
 
         for btn in self.menu_buttons:
             btn.draw(self.screen)
 
         high = self.high_scores.get(self.difficulty, 0)
+
         draw_text_centered(
-            self.screen, f"Rekor ({self.difficulty}): {high}", self.font_small, COLOR_TEXT_DIM,
-            (SCREEN_WIDTH // 2, SCREEN_HEIGHT - 40)
+            self.screen,
+            f"High Score ({self.difficulty}): {high}",
+            self.font_small,
+            COLOR_TEXT_DIM,
+            (SCREEN_WIDTH // 2, SCREEN_HEIGHT - 40),
         )
 
-        controls_text = "Yön tuşları / WASD ile hareket, P ile duraklat"
+        controls_text = "Arrow Keys / WASD to move, P to pause"
+
         draw_text_centered(
-            self.screen, controls_text, self.font_small, COLOR_TEXT_DIM,
-            (SCREEN_WIDTH // 2, SCREEN_HEIGHT - 20)
+            self.screen,
+            controls_text,
+            self.font_small,
+            COLOR_TEXT_DIM,
+            (SCREEN_WIDTH // 2, SCREEN_HEIGHT - 20),
         )
 
     def _draw_pause_overlay(self):
-        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+        overlay = pygame.Surface(
+            (SCREEN_WIDTH, SCREEN_HEIGHT),
+            pygame.SRCALPHA,
+        )
+
         overlay.fill((0, 0, 0, 150))
         self.screen.blit(overlay, (0, 0))
 
         draw_text_centered(
-            self.screen, "DURAKLATILDI", self.font_large, COLOR_TEXT,
-            (SCREEN_WIDTH // 2, 180)
+            self.screen,
+            "PAUSED",
+            self.font_large,
+            COLOR_TEXT,
+            (SCREEN_WIDTH // 2, 180),
         )
+
         for btn in self.pause_buttons:
             btn.draw(self.screen)
 
     def _draw_gameover_overlay(self):
-        overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.SRCALPHA)
+        overlay = pygame.Surface(
+            (SCREEN_WIDTH, SCREEN_HEIGHT),
+            pygame.SRCALPHA,
+        )
+
         overlay.fill((0, 0, 0, 170))
         self.screen.blit(overlay, (0, 0))
 
         draw_text_centered(
-            self.screen, "OYUN BİTTİ", self.font_large, (235, 90, 90),
-            (SCREEN_WIDTH // 2, 160)
+            self.screen,
+            "GAME OVER",
+            self.font_large,
+            (235, 90, 90),
+            (SCREEN_WIDTH // 2, 160),
         )
+
         draw_text_centered(
-            self.screen, f"Skor: {self.score}", self.font_medium, COLOR_TEXT,
-            (SCREEN_WIDTH // 2, 220)
+            self.screen,
+            f"Score: {self.score}",
+            self.font_medium,
+            COLOR_TEXT,
+            (SCREEN_WIDTH // 2, 220),
         )
 
         if self.new_record:
             draw_text_centered(
-                self.screen, "🎉 Yeni Rekor! 🎉", self.font_medium, COLOR_ACCENT,
-                (SCREEN_WIDTH // 2, 260)
+                self.screen,
+                "🎉 New High Score! 🎉",
+                self.font_medium,
+                COLOR_ACCENT,
+                (SCREEN_WIDTH // 2, 260),
             )
+
         else:
             high = self.high_scores.get(self.difficulty, 0)
+
             draw_text_centered(
-                self.screen, f"Rekor: {high}", self.font_medium, COLOR_TEXT_DIM,
-                (SCREEN_WIDTH // 2, 260)
+                self.screen,
+                f"High Score: {high}",
+                self.font_medium,
+                COLOR_TEXT_DIM,
+                (SCREEN_WIDTH // 2, 260),
             )
 
         for btn in self.gameover_buttons:

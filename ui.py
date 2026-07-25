@@ -1,9 +1,3 @@
-"""
-ui.py
-Menülerde kullanılan basit Buton bileşeni ve oyun içi üst bilgi
-çubuğunu (skor, rekor, zorluk) çizen yardımcı fonksiyonlar.
-"""
-
 import pygame
 from settings import (
     COLOR_BUTTON, COLOR_BUTTON_HOVER, COLOR_BUTTON_BORDER,
@@ -40,15 +34,14 @@ class Button:
 
 
 def draw_topbar(surface, font, score, high_score, difficulty):
-    """Oyun ekranının üstündeki skor / rekor / zorluk bilgi çubuğunu çizer."""
     bar_rect = pygame.Rect(0, 0, SCREEN_WIDTH, TOPBAR_HEIGHT)
     pygame.draw.rect(surface, COLOR_TOPBAR, bar_rect)
     pygame.draw.line(surface, (50, 53, 60), (0, TOPBAR_HEIGHT), (SCREEN_WIDTH, TOPBAR_HEIGHT), 2)
 
-    score_surf = font.render(f"Skor: {score}", True, COLOR_TEXT)
+    score_surf = font.render(f"Score: {score}", True, COLOR_TEXT)
     surface.blit(score_surf, (16, TOPBAR_HEIGHT // 2 - score_surf.get_height() // 2))
 
-    high_surf = font.render(f"Rekor: {high_score}", True, COLOR_TEXT_DIM)
+    high_surf = font.render(f"High Score: {high_score}", True, COLOR_TEXT_DIM)
     high_rect = high_surf.get_rect(midtop=(SCREEN_WIDTH // 2, 10))
     surface.blit(high_surf, high_rect)
 

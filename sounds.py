@@ -1,10 +1,3 @@
-"""
-sounds.py
-Harici ses dosyalarına ihtiyaç duymadan, pygame.sndarray kullanarak
-basit sinüs dalga tonları üretir (yem yeme, çarpma, vs.).
-Bu sayede proje tamamen bagimsiz calisir, ekstra .wav dosyası gerekmez.
-"""
-
 import numpy as np
 import pygame
 
@@ -19,7 +12,6 @@ class SoundManager:
             self.gameover_sound = self._make_tone(160, 0.35, volume=0.3, fade=True)
             self.click_sound = self._make_tone(600, 0.05, volume=0.15)
         except Exception:
-            # Ses cihazı bulunamadıysa (örn. sunucu ortamı) sessiz modda devam et
             self.enabled = False
 
     def _make_tone(self, frequency, duration, volume=0.3, fade=False):
@@ -33,7 +25,6 @@ class SoundManager:
             wave = wave * fade_curve
 
         mono = (wave * volume * 32767).astype(np.int16)
-        # Mixer stereo (channels=2) olarak başlatıldığı için 2 kanallı dizi üret
         stereo = np.column_stack((mono, mono))
         return pygame.sndarray.make_sound(np.ascontiguousarray(stereo))
 
@@ -52,3 +43,4 @@ class SoundManager:
     def play_click(self):
         if self.enabled:
             self.click_sound.play()
+
