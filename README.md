@@ -1,58 +1,58 @@
-# 🐍 Yılan Oyunu (Snake) — Python & Pygame
+# 🐍 Snake Game — Python & Pygame
 
-Tam özellikli, çok dosyalı, **pixel-art temalı** bir Snake oyunu.
-Görsel stil, "Plassy" logosundaki orman/gece temasına ve pixel-art
-yılan karakterine göre tasarlanmıştır.
+A fully featured, multi-file **pixel-art themed** Snake game.
 
-## Özellikler
+The visual style is inspired by the forest/night aesthetic and pixel-art snake character from the "Plassy" logo.
 
-- **Pixel-art grafikler**: Yılan başı (4 yön), gövde, kıvrım, kuyruk, elma, özel yem ve orman zemin karoları özel üretilmiş sprite'lardır
-- **Ana menü**: Zorluk seviyesi seçimi (Kolay / Orta / Zor)
-- **3 zorluk seviyesi**: Yılan hızı zorluğa göre değişir
-- **Duraklatma menüsü**: `P` veya `ESC` ile oyunu duraklat
-- **Oyun sonu ekranı**: Skor gösterimi ve tekrar oyna / ana menü seçenekleri
-- **Yüksek skor sistemi**: `highscores.json` dosyasında zorluk bazlı kalıcı kayıt
-- **Normal + Özel (bonus) yem**: Özel yemler zamanla kaybolur, daha çok puan verir ve yılanı 2 hücre büyütür
-- **Ses efektleri**: Harici dosya gerekmeden anlık üretilen tonlar (yem yeme, çarpma, tıklama)
-- **Farenin de çalıştığı butonlu arayüz**: Menülerde hem klavye hem fare kullanılabilir
-- **Sprite bulunamazsa otomatik yedek mod**: PNG dosyaları eksikse oyun eski vektörel çizime geri döner, çökmez
+## Features
 
-## Kurulum
+- **Pixel-art graphics**: Custom-made sprites for the snake head (4 directions), body, turns, tail, apple, special food, and forest ground tiles
+- **Main menu**: Difficulty selection (Easy / Medium / Hard)
+- **3 difficulty levels**: Snake speed changes based on the selected difficulty
+- **Pause menu**: Pause the game with `P` or `ESC`
+- **Game over screen**: Displays the score and provides Play Again / Main Menu options
+- **High score system**: Persistent difficulty-based records stored in `highscores.json`
+- **Normal + Special (Bonus) Food**: Special food disappears after a short time, grants more points, and grows the snake by 2 segments
+- **Sound effects**: Real-time generated sounds without requiring external audio files (eating, collision, button clicks)
+- **Mouse-supported interface**: Menus can be controlled with both keyboard and mouse
+- **Automatic fallback mode**: If sprite PNG files are missing, the game falls back to the vector-based renderer instead of crashing
+
+## Installation
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Çalıştırma
+## Running the Game
 
 ```bash
 python main.py
 ```
 
-## Kontroller
+## Controls
 
-| Tuş | İşlev |
-|---|---|
-| Yön tuşları / WASD | Yılanı yönlendir |
-| P / ESC | Duraklat / Devam et |
-| Enter | Menüde başlat, oyun sonunda tekrar oyna |
-| Fare | Menü butonlarına tıkla |
+| Key | Function |
+|------|----------|
+| Arrow Keys / WASD | Move the snake |
+| P / ESC | Pause / Resume |
+| Enter | Start from menu, play again after game over |
+| Mouse | Click menu buttons |
 
-## Dosya Yapısı
+## Project Structure
 
-```
+```text
 snake_game/
-├── main.py               # Oyun döngüsü ve durum makinesi (menü/oyun/pause/gameover)
-├── snake.py               # Yılan sınıfı: hareket, büyüme, çarpışma, sprite/vektör çizim
-├── food.py                 # Normal ve özel (bonus) yem mantığı
-├── settings.py              # Tüm sabitler, renkler (orman teması), zorluk ayarları
-├── ui.py                     # Buton bileşeni ve HUD (skor çubuğu) çizimi
-├── highscore.py               # JSON tabanlı yüksek skor kaydı/okuma
-├── sounds.py                   # pygame ile anlık üretilen ses efektleri
-├── assets.py                    # Pixel-art sprite'ları yükleyip ölçekleyen modül
-├── generate_sprites.py           # Sprite PNG'lerini üreten script (Pillow ile)
+├── main.py                  # Game loop and state machine (menu/game/pause/game over)
+├── snake.py                 # Snake class: movement, growth, collisions, sprite/vector rendering
+├── food.py                  # Normal and special (bonus) food logic
+├── settings.py              # Constants, colors (forest theme), difficulty settings
+├── ui.py                    # Button component and HUD (score bar) rendering
+├── highscore.py             # JSON-based high score saving/loading
+├── sounds.py                # Real-time generated sound effects using pygame
+├── assets.py                # Loads and scales pixel-art sprites
+├── generate_sprites.py      # Script that generates sprite PNG files using Pillow
 ├── assets/
-│   └── sprites/                   # Üretilmiş pixel-art PNG dosyaları
+│   └── sprites/             # Generated pixel-art PNG files
 │       ├── head_up.png, head_down.png, head_left.png, head_right.png
 │       ├── body_straight.png, body_turn.png, tail.png
 │       ├── food_apple.png, food_special.png
@@ -61,23 +61,22 @@ snake_game/
 └── README.md
 ```
 
-## Pixel-Art Sprite'ları Yeniden Üretme
+## Regenerating Pixel-Art Sprites
 
-Sprite'lar `assets/sprites/` klasöründe hazır PNG olarak gelir; oyunu
-doğrudan çalıştırabilirsiniz. Renk paletini veya şekilleri değiştirmek
-isterseniz `generate_sprites.py` dosyasını düzenleyip yeniden çalıştırın:
+The sprites are included as ready-to-use PNG files in the `assets/sprites/` directory, so you can run the game immediately.
+
+If you want to modify the color palette or sprite shapes, edit `generate_sprites.py` and run:
 
 ```bash
 python generate_sprites.py
 ```
 
-Bu script Pillow (PIL) kullanır ve `assets/sprites/` altındaki tüm
-PNG'leri yeniden oluşturur.
+This script uses Pillow (PIL) and recreates all PNG files inside the `assets/sprites/` directory.
 
-## Notlar
+## Notes
 
-- Yüksek skorlar her zorluk seviyesi için ayrı ayrı `highscores.json` dosyasında saklanır.
-- Ses cihazı bulunamayan ortamlarda (örn. bazı sunucular) oyun sessiz modda otomatik devam eder, hata vermez.
-- `assets/sprites/` klasörü eksik veya bozuksa (`settings.py` içinde `USE_SPRITES = True` olsa bile) oyun otomatik olarak eski vektörel çizim moduna geçer, çökmez.
-- `settings.py` içinden `USE_SPRITES = False` yaparsanız pixel-art yerine düz vektörel çizim kullanılır.
-- `settings.py` içinden `WRAP_AROUND = True` yaparsanız yılan duvardan geçip karşı taraftan çıkar.
+- High scores are stored separately for each difficulty level in `highscores.json`.
+- If no audio device is available (for example, on some servers), the game automatically switches to silent mode without errors.
+- If the `assets/sprites/` directory is missing or corrupted, the game automatically falls back to the vector rendering mode, even if `USE_SPRITES = True` is enabled in `settings.py`.
+- Setting `USE_SPRITES = False` in `settings.py` will disable pixel-art graphics and use the vector renderer instead.
+- Setting `WRAP_AROUND = True` in `settings.py` allows the snake to pass through walls and reappear on the opposite side.
