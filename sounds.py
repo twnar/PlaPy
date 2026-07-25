@@ -13,7 +13,7 @@ class SoundManager:
             self.click_sound = self._make_tone(600, 0.05, volume=0.15)
         except Exception:
             self.enabled = False
-
+ 
     def _make_tone(self, frequency, duration, volume=0.3, fade=False):
         sample_rate = 44100
         n_samples = int(sample_rate * duration)
