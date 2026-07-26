@@ -1,82 +1,170 @@
-# 🐍 PlaPy: Python Snake Game
+# 🐍 PlaPy: Pixel-Art Snake Game
 
-A fully featured, multi-file **pixel-art themed** Snake game.
+A fully featured, pixel-art themed Snake game built with Python and Pygame.
 
-The visual style is inspired by the forest/night aesthetic and pixel-art snake character from the "Plassy" logo.
+PlaPy combines classic Snake gameplay with custom pixel-art graphics, multiple difficulty levels, persistent high scores, bonus food mechanics, sound effects, and a polished menu system.
 
-## Features
+---
 
-- **Pixel-art graphics**: Custom-made sprites for the snake head (4 directions), body, turns, tail, apple, special food, and forest ground tiles
-- **Main menu**: Difficulty selection (Easy / Medium / Hard)
-- **3 difficulty levels**: Snake speed changes based on the selected difficulty
-- **Pause menu**: Pause the game with `P` or `ESC`
-- **Game over screen**: Displays the score and provides Play Again / Main Menu options
-- **High score system**: Persistent difficulty-based records stored in `highscores.json`
-- **Normal + Special (Bonus) Food**: Special food disappears after a short time, grants more points, and grows the snake by 2 segments
-- **Sound effects**: Real-time generated sounds without requiring external audio files (eating, collision, button clicks)
-- **Mouse-supported interface**: Menus can be controlled with both keyboard and mouse
-- **Automatic fallback mode**: If sprite PNG files are missing, the game falls back to the vector-based renderer instead of crashing
+## ✨ Features
 
-## Installation
+- 🎨 Custom pixel-art sprites
+- 🌲 Forest/night themed visuals
+- 🎮 Main menu with difficulty selection
+- ⚡ Three difficulty levels (Easy, Medium, Hard)
+- ⏸ Pause and resume functionality
+- 💀 Game over screen with replay options
+- 🏆 Persistent high score system
+- 🍎 Normal and bonus food mechanics
+- 🔊 Procedurally generated sound effects (no external audio files required)
+- 🖱 Keyboard and mouse support
+- 🛡 Automatic fallback rendering if sprite assets are missing
+- 🔄 Optional screen wrap-around mode
+
+---
+
+## 📋 Requirements
+
+Before running the game, make sure you have:
+
+- Python 3.8 or higher
+- Pygame
+- Pillow (PIL)
+
+All required Python packages are listed in `requirements.txt`.
+
+---
+
+## 🚀 Installation
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/twnar/PlaPy.git
+cd PlaPy
+```
+
+### 2. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Running the Game
+---
+
+## ▶️ Running the Game
+
+From the project root directory, run:
 
 ```bash
 python main.py
 ```
 
-## Controls
+---
 
-| Key | Function |
-|------|----------|
+## 🎮 Controls
+
+| Key | Action |
+|-------|----------|
 | Arrow Keys / WASD | Move the snake |
-| P / ESC | Pause / Resume |
-| Enter | Start from menu, play again after game over |
-| Mouse | Click menu buttons |
+| P | Pause / Resume |
+| ESC | Pause / Resume |
+| Enter | Start game / Replay after game over |
+| Mouse | Navigate menus and click buttons |
 
-## Project Structure
+---
+
+## 📁 Project Structure
 
 ```text
-snake_game/
-├── main.py                  # Game loop and state machine (menu/game/pause/game over)
-├── snake.py                 # Snake class: movement, growth, collisions, sprite/vector rendering
-├── food.py                  # Normal and special (bonus) food logic
-├── settings.py              # Constants, colors (forest theme), difficulty settings
-├── ui.py                    # Button component and HUD (score bar) rendering
-├── highscore.py             # JSON-based high score saving/loading
-├── sounds.py                # Real-time generated sound effects using pygame
-├── assets.py                # Loads and scales pixel-art sprites
-├── generate_sprites.py      # Script that generates sprite PNG files using Pillow
+PlaPy/
+├── main.py                  # Main game loop and state management
+├── snake.py                 # Snake logic, movement, collisions, rendering
+├── food.py                  # Normal and bonus food system
+├── settings.py              # Configuration, colors, difficulty settings
+├── ui.py                    # Buttons, menus, HUD rendering
+├── highscore.py             # High score saving/loading
+├── sounds.py                # Runtime-generated sound effects
+├── assets.py                # Sprite loading and scaling
+├── generate_sprites.py      # Pixel-art sprite generator
 ├── assets/
-│   └── sprites/             # Generated pixel-art PNG files
-│       ├── head_up.png, head_down.png, head_left.png, head_right.png
-│       ├── body_straight.png, body_turn.png, tail.png
-│       ├── food_apple.png, food_special.png
-│       └── grass_0.png, grass_1.png
+│   └── sprites/
+│       ├── head_up.png
+│       ├── head_down.png
+│       ├── head_left.png
+│       ├── head_right.png
+│       ├── body_straight.png
+│       ├── body_turn.png
+│       ├── tail.png
+│       ├── food_apple.png
+│       ├── food_special.png
+│       ├── grass_0.png
+│       └── grass_1.png
+├── highscores.json
 ├── requirements.txt
 └── README.md
 ```
 
-## Regenerating Pixel-Art Sprites
+---
 
-The sprites are included as ready-to-use PNG files in the `assets/sprites/` directory, so you can run the game immediately.
+## 🎨 Regenerating Pixel-Art Sprites
 
-If you want to modify the color palette or sprite shapes, edit `generate_sprites.py` and run:
+The repository already includes all generated sprite files, so no additional setup is required.
+
+If you'd like to customize the artwork, colors, or sprite shapes:
 
 ```bash
 python generate_sprites.py
 ```
 
-This script uses Pillow (PIL) and recreates all PNG files inside the `assets/sprites/` directory.
+The script will recreate all sprite PNG files inside:
 
-## Notes
+```text
+assets/sprites/
+```
 
-- High scores are stored separately for each difficulty level in `highscores.json`.
-- If no audio device is available (for example, on some servers), the game automatically switches to silent mode without errors.
-- If the `assets/sprites/` directory is missing or corrupted, the game automatically falls back to the vector rendering mode, even if `USE_SPRITES = True` is enabled in `settings.py`.
-- Setting `USE_SPRITES = False` in `settings.py` will disable pixel-art graphics and use the vector renderer instead.
-- Setting `WRAP_AROUND = True` in `settings.py` allows the snake to pass through walls and reappear on the opposite side.
+---
+
+## ⚙️ Configuration
+
+Several gameplay options can be adjusted inside `settings.py`.
+
+### Disable Pixel-Art Sprites
+
+```python
+USE_SPRITES = False
+```
+
+Switches rendering to the built-in vector renderer.
+
+### Enable Screen Wrap-Around
+
+```python
+WRAP_AROUND = True
+```
+
+Allows the snake to pass through one edge of the screen and reappear on the opposite side.
+
+---
+
+## 📝 Notes
+
+- High scores are stored separately for each difficulty level.
+- High scores are saved in `highscores.json`.
+- If no audio device is available, the game automatically switches to silent mode.
+- If sprite files are missing or corrupted, the game automatically falls back to vector rendering instead of crashing.
+- The game can be played entirely with either keyboard or mouse navigation.
+
+---
+
+## 🛠 Built With
+
+- Python
+- Pygame
+- Pillow (PIL)
+
+---
+
+## 📄 License
+
+This project is open-source and available under the MIT License.
