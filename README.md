@@ -2,6 +2,10 @@
 
 A Snake game with a hand-built pixel-art forest theme, written in Python with Pygame. Three difficulty levels, per-difficulty high scores, bonus food, procedurally generated sound (no audio files to ship), and a full menu/pause/game-over flow.
 
+![Python](https://img.shields.io/badge/python-3.8%2B-blue)
+![Pygame](https://img.shields.io/badge/pygame-2.x-green)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
+
 ## Features
 
 - Pixel-art sprites (head/body/tail/food/grass tiles) in a forest/night palette
