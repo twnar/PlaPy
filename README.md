@@ -1,170 +1,96 @@
-# 🐍 PlaPy: Pixel-Art Snake Game
+# PlaPy
 
-A fully featured, pixel-art themed Snake game built with Python and Pygame.
+A Snake game with a hand-built pixel-art forest theme, written in Python with Pygame. Three difficulty levels, per-difficulty high scores, bonus food, procedurally generated sound (no audio files to ship), and a full menu/pause/game-over flow.
 
-PlaPy combines classic Snake gameplay with custom pixel-art graphics, multiple difficulty levels, persistent high scores, bonus food mechanics, sound effects, and a polished menu system.
+## Features
 
----
+- Pixel-art sprites (head/body/tail/food/grass tiles) in a forest/night palette
+- Main menu with Easy / Medium / Hard difficulty select
+- Pause and resume, mid-run
+- Game over screen with a one-key replay
+- High scores saved per difficulty in `highscores.json`
+- Normal and bonus food, bonus food on a timer
+- All sound effects generated at runtime — no `.wav`/`.mp3` assets
+- Keyboard (arrows/WASD) or mouse-driven menus
+- Falls back to a vector renderer automatically if sprite files are missing or fail to load
+- Optional screen wrap-around instead of wall collision
 
-## ✨ Features
+## Requirements
 
-- 🎨 Custom pixel-art sprites
-- 🌲 Forest/night themed visuals
-- 🎮 Main menu with difficulty selection
-- ⚡ Three difficulty levels (Easy, Medium, Hard)
-- ⏸ Pause and resume functionality
-- 💀 Game over screen with replay options
-- 🏆 Persistent high score system
-- 🍎 Normal and bonus food mechanics
-- 🔊 Procedurally generated sound effects (no external audio files required)
-- 🖱 Keyboard and mouse support
-- 🛡 Automatic fallback rendering if sprite assets are missing
-- 🔄 Optional screen wrap-around mode
-
----
-
-## 📋 Requirements
-
-Before running the game, make sure you have:
-
-- Python 3.8 or higher
+- Python 3.8+
 - Pygame
-- Pillow (PIL)
+- Pillow
 
-All required Python packages are listed in `requirements.txt`.
-
----
-
-## 🚀 Installation
-
-### 1. Clone the repository
+## Install
 
 ```bash
 git clone https://github.com/twnar/PlaPy.git
 cd PlaPy
-```
-
-### 2. Install dependencies
-
-```bash
 pip install -r requirements.txt
 ```
 
----
-
-## ▶️ Running the Game
-
-From the project root directory, run:
+## Run
 
 ```bash
 python main.py
 ```
 
----
+## Controls
 
-## 🎮 Controls
+| Input | Action |
+|---|---|
+| Arrow keys / WASD | Move |
+| P / Esc | Pause / resume |
+| Enter | Start / replay |
+| Mouse | Menu navigation |
 
-| Key | Action |
-|-------|----------|
-| Arrow Keys / WASD | Move the snake |
-| P | Pause / Resume |
-| ESC | Pause / Resume |
-| Enter | Start game / Replay after game over |
-| Mouse | Navigate menus and click buttons |
+## Project layout
 
----
-
-## 📁 Project Structure
-
-```text
+```
 PlaPy/
-├── main.py                  # Main game loop and state management
-├── snake.py                 # Snake logic, movement, collisions, rendering
-├── food.py                  # Normal and bonus food system
-├── settings.py              # Configuration, colors, difficulty settings
-├── ui.py                    # Buttons, menus, HUD rendering
-├── highscore.py             # High score saving/loading
-├── sounds.py                # Runtime-generated sound effects
-├── assets.py                # Sprite loading and scaling
-├── generate_sprites.py      # Pixel-art sprite generator
-├── assets/
-│   └── sprites/
-│       ├── head_up.png
-│       ├── head_down.png
-│       ├── head_left.png
-│       ├── head_right.png
-│       ├── body_straight.png
-│       ├── body_turn.png
-│       ├── tail.png
-│       ├── food_apple.png
-│       ├── food_special.png
-│       ├── grass_0.png
-│       └── grass_1.png
+├── main.py                # game loop, state machine
+├── snake.py                # movement, collision, rendering
+├── food.py                 # normal + bonus food spawning
+├── settings.py             # colors, tuning, difficulty presets
+├── ui.py                   # menus, HUD, buttons
+├── highscore.py            # load/save highscores.json
+├── sounds.py               # runtime-synthesized SFX
+├── assets.py               # sprite loading/scaling
+├── generate_sprites.py     # sprite generator (see below)
+├── assets/sprites/         # head_*, body_*, tail, food_*, grass_*
 ├── highscores.json
-├── requirements.txt
-└── README.md
+└── requirements.txt
 ```
 
----
+## Regenerating sprites
 
-## 🎨 Regenerating Pixel-Art Sprites
-
-The repository already includes all generated sprite files, so no additional setup is required.
-
-If you'd like to customize the artwork, colors, or sprite shapes:
+Sprites are already committed, so this is only needed if you want to tweak the art:
 
 ```bash
 python generate_sprites.py
 ```
 
-The script will recreate all sprite PNG files inside:
+This overwrites everything in `assets/sprites/`.
 
-```text
-assets/sprites/
-```
+## Configuration
 
----
-
-## ⚙️ Configuration
-
-Several gameplay options can be adjusted inside `settings.py`.
-
-### Disable Pixel-Art Sprites
+Edit `settings.py`:
 
 ```python
-USE_SPRITES = False
+USE_SPRITES = False   # use the vector renderer instead of pixel-art sprites
+WRAP_AROUND = True    # snake wraps around screen edges instead of dying on walls
 ```
 
-Switches rendering to the built-in vector renderer.
+## Notes
 
-### Enable Screen Wrap-Around
+- High scores are tracked independently per difficulty.
+- No audio device detected → game runs silently, no crash.
+- Missing/corrupt sprite files → falls back to vector rendering, no crash.
 
-```python
-WRAP_AROUND = True
-```
+## Built with
 
-Allows the snake to pass through one edge of the screen and reappear on the opposite side.
+Python · Pygame · Pillow
 
----
+## License
 
-## 📝 Notes
-
-- High scores are stored separately for each difficulty level.
-- High scores are saved in `highscores.json`.
-- If no audio device is available, the game automatically switches to silent mode.
-- If sprite files are missing or corrupted, the game automatically falls back to vector rendering instead of crashing.
-- The game can be played entirely with either keyboard or mouse navigation.
-
----
-
-## 🛠 Built With
-
-- Python
-- Pygame
-- Pillow (PIL)
-
----
-
-## 📄 License
-
-This project is open-source and available under the MIT License.
+MIT — see `LICENSE`.
